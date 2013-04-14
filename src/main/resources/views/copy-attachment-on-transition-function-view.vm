@@ -1,0 +1,9 @@
+#if ($rootdir)
+    Attachments will be copied to : <b>$rootdir</b>
+#end
+
+#if ($deletefile == "yes")
+    Files will be removed after copy
+#else
+    Files won't be removed after copy
+#end

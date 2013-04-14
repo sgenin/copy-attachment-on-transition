@@ -1,0 +1,46 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="copy-attachment-on-transition"/>
+    
+    <!-- add our web resources -->
+    <web-resource key="copy-attachment-on-transition-resources" name="copy-attachment-on-transition Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="copy-attachment-on-transition.css" location="/css/copy-attachment-on-transition.css"/>
+        <resource type="download" name="copy-attachment-on-transition.js" location="/js/copy-attachment-on-transition.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>copy-attachment-on-transition</context>
+    </web-resource>
+
+    <workflow-function key="copy-attachment-on-transition-function" name="Copy file attachment on transition"
+                       class="com.ideotechnologies.jira.cfot.CopyAttachmentOnTransitionFactory">
+        <description>Copy all attachments of an issue at a specified location</description>
+
+        <function-class>
+            com.ideotechnologies.jira.cfot.CopyAttachmentOnTransition
+        </function-class>
+
+        <orderable>true</orderable>
+        <unique>true</unique>
+        <deletable>true</deletable>
+
+        <resource type="velocity" name="view"
+                  location="/views/copy-attachment-on-transition-function-view.vm"/>
+        <resource type="velocity" name="input-parameters"
+                  location="/views/copy-attachment-on-transition-function-input-params.vm"/>
+        <resource type="velocity" name="edit-parameters"
+                  location="/views/copy-attachment-on-transition-function-input-params.vm"/>
+    </workflow-function>
+    <!-- import from the product container -->
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" />
+    
+</atlassian-plugin>

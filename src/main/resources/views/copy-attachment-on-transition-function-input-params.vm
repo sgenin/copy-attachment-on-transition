@@ -1,0 +1,22 @@
+<tr bgcolor="#ffffff">
+    <td align="right" valign="top" bgcolor="#fffff0">
+        <span class="label">Root Directory :</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <input type="text" name="rootdir" value="$rootdir"/>
+        <br><font size="1">Enter the root directory</font>
+    </td>
+</tr>
+<tr bgcolor="#ffffff">
+    <td align="right" valign="top" bgcolor="#fffff0">
+        <span class="label">Delete after copy :</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+
+        <input type="checkbox" name="deletefile" value="yes"
+        #if($deletefile == "yes")
+           checked="yes"
+        #end
+        />
+    </td>
+</tr>
