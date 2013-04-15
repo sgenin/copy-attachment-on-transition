@@ -20,3 +20,41 @@
         />
     </td>
 </tr>
+
+<tr bgcolor="#ffffff">
+    <td align="right" valign="top" bgcolor="#fffff0">
+       <label for="customfield">$i18n.getText('cfot.customfield')</label>
+    </td>
+    <td>
+       <select name="selectedcustomfield" id=customfield">
+       #foreach($customfield in $customfields)
+            #if($customfield.id== $selectedcustomfield)
+                <option value="${customfield.id}" selected>${customfield.name}</option>
+            #else
+                <option value="${customfield.id}">${customfield.name}</option>
+            #end
+       #end
+       </select>
+    </td>
+</tr>
+
+<tr bgcolor="#ffffff">
+    <td align="right" valign="top" bgcolor="#fffff0">
+        <span class="label">Value to set if success :</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <input type="text" name="successvalue" value="$successvalue"/>
+        <br><font size="1">Enter the success value</font>
+    </td>
+</tr>
+
+<tr bgcolor="#ffffff">
+    <td align="right" valign="top" bgcolor="#fffff0">
+        <span class="label">Value to set if error :</span>
+    </td>
+    <td bgcolor="ffffff" nowrap>
+        <input type="text" name="errorvalue" value="$errorvalue"/>
+        <br><font size="1">Enter the error value</font>
+    </td>
+</tr>
+

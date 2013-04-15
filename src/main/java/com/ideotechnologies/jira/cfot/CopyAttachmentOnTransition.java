@@ -5,7 +5,10 @@ import com.atlassian.jira.exception.RemoveException;
 import com.atlassian.jira.issue.AttachmentManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.IssueManager;
+import com.atlassian.jira.issue.ModifiedValue;
 import com.atlassian.jira.issue.attachment.Attachment;
+import com.atlassian.jira.issue.fields.CustomField;
+import com.atlassian.jira.issue.util.DefaultIssueChangeHolder;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.util.AttachmentUtils;
 import com.atlassian.jira.workflow.JiraWorkflow;
@@ -58,6 +61,8 @@ public class CopyAttachmentOnTransition extends AbstractJiraFunctionProvider{
         Boolean success=true;
 
         String rootDir = (String) args.get("rootdir");
+        String customFieldToSet = (String)args.get("selectedcustomfield");
+        String shallDelete=(String)args.get("deletefile");
         for (Attachment attachment:attachmentsList) {
 
             File fileOrigin=AttachmentUtils.getAttachmentFile(issue, attachment);
@@ -71,7 +76,8 @@ public class CopyAttachmentOnTransition extends AbstractJiraFunctionProvider{
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
 
-                if (ps.getString("deletefile") == "yes") {
+
+                if ((shallDelete.compareTo("yes") == 0) && (success == true)){
 
                     try {
                         attachmentManager.deleteAttachment(attachment);
@@ -87,34 +93,17 @@ public class CopyAttachmentOnTransition extends AbstractJiraFunctionProvider{
 
         }
 
+        CustomField customField = ComponentAccessor.getCustomFieldManager().getCustomFieldObject(customFieldToSet);
+        String value=new String();
+        if (success == true) {
+            value=  (String) args.get("successvalue");
+        }
+        else {
+            value=  (String) args.get("errorvalue");
+        }
 
-        // Search if there is an automatic action to fire
- //       ActionDescriptor actionDescriptor=getTransition(issue,success);
-//
-//        if (actionDescriptor != null) {
-//
-//           boolean indexingPreviouslyEnabled = ImportUtils.isIndexIssues();
-//           User projectLead = issue.getProjectObject().getLead();
-//
-//           IssueService issueService = ComponentAccessor.getIssueService();
-//           IssueInputParameters issueInputParameters = issueService.newIssueInputParameters();
-//
-//
-//           if (success==true) {
-//               issueInputParameters.setResolutionId("2");
-//           }
-//
-//            IssueService.TransitionValidationResult validationResult = issueService.validateTransition (projectLead, issue.getId(), actionDescriptor.getId(), issueInputParameters);
-//           IssueService.TransitionValidationResult validationResult = issueService.validateTransition (projectLead, issue.getId(), 2, issueInputParameters);
-//           issueService.transition(projectLead, validationResult);
-//           try {
-//                   ComponentAccessor.getIssueIndexManager().reIndex(issue);
-//               } catch (IndexException e) {
-//                   e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//            }
-//            if (!indexingPreviouslyEnabled)
-//                ImportUtils.setIndexIssues(true);
-//        }
+        customField.updateValue(null,issue,new ModifiedValue(issue.getCustomFieldValue(customField),value),new DefaultIssueChangeHolder());
+
     }
 
 
@@ -147,6 +136,9 @@ public class CopyAttachmentOnTransition extends AbstractJiraFunctionProvider{
             securityLevel=DEFAULT_DIR;
         }
 
+        securityLevel=securityLevel.replace(' ','_');
+        securityLevel=securityLevel.replace('\\','_');
+        securityLevel=securityLevel.replace('/','_');
 
         // Check if the subdirectory exists.
 

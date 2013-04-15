@@ -1,9 +1,11 @@
 #if ($rootdir)
     Attachments will be copied to : <b>$rootdir</b>
 #end
-
+<br/>
 #if ($deletefile == "yes")
     Files will be removed after copy
 #else
     Files won't be removed after copy
 #end
+<br/>
+The field <b>$selectedcustomfieldname</b> will have the value <b>$successvalue</b> in case of success, and <b>$errorvalue</b> otherwise.
